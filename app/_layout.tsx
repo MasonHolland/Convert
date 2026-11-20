@@ -1,10 +1,12 @@
-import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect, useSyncExternalStore } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import Colors from '@/constants/Colors';
+import { hasHydrated, onHydrated } from '@/src/store/useAppStore';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -12,44 +14,41 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   anchor: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+  // Keep the splash screen up until saved defaults/cities are loaded,
+  // so each tab opens on the user's defaults rather than flashing the built-ins.
+  const ready = useSyncExternalStore(onHydrated, hasHydrated, hasHydrated);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    if (ready) SplashScreen.hideAsync();
+  }, [ready]);
 
-  if (!loaded) {
-    return null;
-  }
-
+  if (!ready) return null;
   return <RootLayoutNav />;
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const scheme = useColorScheme();
+  const palette = Colors[scheme];
+  const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const theme = {
+    ...base,
+    colors: { ...base.colors, primary: palette.tint, background: palette.background, card: palette.card },
+  };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={theme}>
+      <StatusBar style="auto" />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="city-search" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="settings/currency" options={{ presentation: 'modal', title: 'Currency Defaults' }} />
+        <Stack.Screen name="settings/measure" options={{ presentation: 'modal', title: 'Measurement Defaults' }} />
       </Stack>
     </ThemeProvider>
   );

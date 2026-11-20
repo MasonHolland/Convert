@@ -8,7 +8,11 @@
     "scheme": "convert",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.convert.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Convert uses your location to show the temperature where you are."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,11 +21,12 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.convert.app"
     },
     "web": {
       "bundler": "metro",
-      "output": "server",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -32,6 +37,12 @@
           "image": "./assets/images/splash-icon.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Convert uses your location to show the temperature where you are."
         }
       ]
     ],
