@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
   leading: { fontSize: 22 },
   code: { fontSize: 20, fontWeight: '600' },
   name: { fontSize: 13, marginTop: 2 },
-  input: { flex: 1, fontSize: 34, fontWeight: '300', textAlign: 'right', fontVariant: ['tabular-nums'] },
+  // minWidth: 0 lets the field shrink to fit the row (web inputs have a default minimum width).
+  input: { flex: 1, minWidth: 0, fontSize: 34, fontWeight: '300', textAlign: 'right', fontVariant: ['tabular-nums'] },
   result: { flex: 1, fontSize: 34, fontWeight: '600', textAlign: 'right', fontVariant: ['tabular-nums'] },
   divider: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   line: { flex: 1, height: StyleSheet.hairlineWidth },

@@ -2,12 +2,12 @@
 
 An iPhone app to use instead of Apple's Weather app. It shows the temperature in °C and °F at the same time, and has two more tabs for converting currency and units.
 
-**▶ Try it:** install **Expo Go** on your iPhone, start the app on your computer and scan the QR code ([steps below](#run-it-on-your-phone)). You don't need a Mac.
+**▶ Try it: [web demo](https://masonholland.github.io/Convert/)**, or the real thing on your iPhone with **Expo Go** ([steps below](#run-it-on-your-phone), no Mac needed). The web demo runs in any browser; on a computer it's shown at iPhone size.
 
 <p align="center">
   <img src="docs/media/demo.gif" width="300" alt="Demo: current weather in °C and °F, adding Tokyo and swiping between cities, converting 250 USD to GBP and JPY, then converting kilograms and a marathon distance">
 </p>
-<p align="center"><sub><a href="docs/media/demo.mp4">Full-quality video (MP4)</a>. Recorded from the web build, which puts the tab bar at the top. On an iPhone it's at the bottom.</sub></p>
+<p align="center"><sub><a href="docs/media/demo.mp4">Full-quality video (MP4)</a></sub></p>
 
 ## The problem
 
@@ -43,7 +43,7 @@ It uses the iOS tab bar, SF Symbols, large titles, sheet pickers and haptics, an
   </tr>
 </table>
 
-<sub>Taken from the web build in a phone-sized browser.</sub>
+<sub>Taken from the web demo in a phone-sized browser.</sub>
 
 ## Tech stack
 
@@ -113,7 +113,7 @@ If the phone can't connect (a guest or office network, for example), use `npx ex
 
 ### In a browser
 
-`npm run web`, then open the URL it prints. This is only for quick checks: the tabs show at the top instead of the bottom, and on Windows flags show as letters.
+`npm run web`, then open the URL it prints. On Windows, flags show as letters.
 
 ### Other commands
 
@@ -126,6 +126,16 @@ If the phone can't connect (a guest or office network, for example), use `npx ex
 | `npm run lint` | Run ESLint |
 | `npm run media` | Re-record the screenshots and demo video in `docs/media/` (see below) |
 | `npx expo-doctor` | Check for dependency and configuration problems |
+
+## Web demo
+
+The web build is a demo of the iPhone app. Every push to `master` runs the tests, exports it with `npx expo export --platform web` and publishes it to GitHub Pages (`.github/workflows/deploy.yml`). `app.json` sets `experiments.baseUrl` to `/Convert` so it works from that sub-path.
+
+A few files only exist for the web build, and iOS never loads them:
+
+- `app/(tabs)/_layout.web.tsx`: a regular bottom tab bar, since native tabs render as a bar at the top on web.
+- `src/components/WebDemo.web.tsx`: on a computer, shows the app at iPhone size in a frame with a short description; in a phone browser, a small "web demo" banner you can close.
+- `components/useColorScheme.web.ts`: follows the browser's light/dark setting.
 
 ## Building the iOS app
 
@@ -140,9 +150,9 @@ Before the first store build, change `ios.bundleIdentifier` in `app.json` (curre
 
 ## Screenshots and demo video
 
-`npm run media` records everything in `docs/media/` with Playwright, using the web build in a phone-sized Chromium. It starts `expo start --web` on port 8081 if it isn't already running, and writes PNG screenshots, `demo.mp4`, `demo.gif` (used above) and `demo-poster.jpg`. Use `npm run media -- --only shots` or `--only video` to do half. The first time, run `npx playwright install chromium`.
+`npm run media` records everything in `docs/media/` with Playwright, using the web build in a phone-sized Chromium (without the demo banner). It starts `expo start --web` on port 8081 if it isn't already running, and writes PNG screenshots, `demo.mp4`, `demo.gif` (used above) and `demo-poster.jpg`. Use `npm run media -- --only shots` or `--only video` to do half. The first time, run `npx playwright install chromium`.
 
-The weather and rates are live, with the location set to London. To make the browser look like a phone, the script loads a flag-emoji font (Windows has none) and stops the amount fields from overflowing their row. The steps are in `scripts/media/capture.mjs`.
+The weather and rates are live, with the location set to London. The script loads a flag-emoji font, because Windows has none. The steps are in `scripts/media/capture.mjs`.
 
 ## Project structure
 
@@ -166,9 +176,10 @@ src/
   lib/time.ts                 Formats each location's local times
   hooks/                      useCurrentPlace, useForecast, useRates
   store/useAppStore.ts        Saved state (cities, defaults, favorites, cached data)
-  components/                 Shared UI (ConverterCard, PickerSheet, DualTemp, WeatherPage …)
+  components/                 Shared UI (ConverterCard, PickerSheet, DualTemp, WeatherPage, WebDemo …)
 components/, constants/       Theme helpers and the iOS-style colors
 __tests__/                    Unit tests
+.github/workflows/deploy.yml  Publishes the web demo to GitHub Pages
 scripts/media/                Records the README screenshots and video
 docs/media/                   Screenshots and demo video used in this README
 ```

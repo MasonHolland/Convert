@@ -9,18 +9,20 @@ const stopServer = await devServer(URL, 'npx expo start --web --port 8081', { cw
 
 const options = {
   flagFont: true,
-  // A native TextInput shrinks to fit its row; an HTML input has a minimum width that makes the
-  // converter row overflow on web (see TODO). Also hide the browser focus ring, which iOS doesn't draw.
-  extraCss: 'input{min-width:0 !important} input:focus,input:focus-visible{outline:none !important}',
+  // Hide the browser focus ring on inputs, which iOS doesn't draw.
+  extraCss: 'input:focus,input:focus-visible{outline:none !important}',
   timezoneId: 'Europe/London',
   locale: 'en-US',
   geolocation: { latitude: 51.5072, longitude: -0.1276 },
   permissions: ['geolocation'],
 };
-const tab = (page, name) => page.getByText(name, { exact: true }).first();
-// Tabs stay mounted, so pick the visible copy of each control.
-const amount = (page) => page.locator('input[aria-label^="Amount in"]:visible').first();
-const swap = (page) => page.locator('[aria-label="Swap"]:visible').first();
+const tab = (page, name) => page.getByRole('tab', { name });
+// Tabs stay mounted (inactive ones are marked inert), so pick the control on the active tab.
+const active = ':visible:not([inert] *)';
+const amount = (page) => page.locator(`input[aria-label^="Amount in"]${active}`).first();
+// The amount field selects its text on focus; blur it so screenshots don't show the selection.
+const blur = (page) => page.evaluate(() => document.activeElement?.blur());
+const swap = (page) => page.locator(`[aria-label="Swap"]${active}`).first();
 
 async function addCity(page, name, match, slow = false) {
   await tap(page, page.getByLabel('Add city')); await wait(page, 900);
@@ -58,14 +60,14 @@ try {
     await addCity(page, 'New York', /New York.*United States/);
     await shot(page, `${OUT}/02-weather-city.png`);
     await tap(page, tab(page, 'Currency')); await wait(page, 2500);
-    await amount(page).fill('250'); await wait(page, 300);
+    await amount(page).fill('250'); await blur(page); await wait(page, 300);
     await tap(page, page.getByText('GBP', { exact: true }).first()); await wait(page, 900);
     await shot(page, `${OUT}/03-currency.png`);
     await tap(page, page.getByLabel(/^Change /).first()); await wait(page, 1500);
     await shot(page, `${OUT}/04-currency-picker.png`);
     await page.goto(URL + 'measure'); await wait(page, 3000);
     await tap(page, page.getByText('Distance', { exact: true }).first()); await wait(page, 600);
-    await amount(page).fill('10'); await wait(page, 600);
+    await amount(page).fill('10'); await blur(page); await wait(page, 600);
     await shot(page, `${OUT}/05-measure.png`);
     await browser.close();
   }

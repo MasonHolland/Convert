@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import Colors from '@/constants/Colors';
+import { WebDemo } from '@/src/components/WebDemo';
 import { hasHydrated, onHydrated } from '@/src/store/useAppStore';
 
 export {
@@ -44,12 +45,14 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={theme}>
       <StatusBar style="auto" />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="city-search" options={{ presentation: 'modal', headerShown: false }} />
-        <Stack.Screen name="settings/currency" options={{ presentation: 'modal', title: 'Currency Defaults' }} />
-        <Stack.Screen name="settings/measure" options={{ presentation: 'modal', title: 'Measurement Defaults' }} />
-      </Stack>
+      <WebDemo>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="city-search" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="settings/currency" options={{ presentation: 'modal', title: 'Currency Defaults' }} />
+          <Stack.Screen name="settings/measure" options={{ presentation: 'modal', title: 'Measurement Defaults' }} />
+        </Stack>
+      </WebDemo>
     </ThemeProvider>
   );
 }
