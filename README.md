@@ -1,128 +1,151 @@
 # Convert
 
-An iOS-first app to use instead of Apple's Weather app. It does three things, each with its own tab at the bottom of the screen:
+An iPhone app to use instead of Apple's Weather app. It shows the temperature in °C and °F at the same time, and has two more tabs for converting currency and units.
 
-| Tab | What it does |
-| --- | --- |
-| **Weather** | Temperature only, always shown in **both °C and °F** |
-| **Currency** | Converts between about 160 currencies, with saved default currencies and favorites |
-| **Measure** | Converts weight and distance (metric, imperial, US, nautical), with a saved default pair for each |
+**▶ Try it:** install **Expo Go** on your iPhone, start the app on your computer and scan the QR code ([steps below](#run-it-on-your-phone)). You don't need a Mac.
 
-This first version is built with Expo / React Native. It already uses native iOS parts (the system tab bar, SF Symbols icons, large collapsing titles, sheet pickers and haptics). A fully native App Store build is planned for later.
+<p align="center">
+  <img src="docs/media/demo.gif" width="300" alt="Demo: current weather in °C and °F, adding Tokyo and swiping between cities, converting 250 USD to GBP and JPY, then converting kilograms and a marathon distance">
+</p>
+<p align="center"><sub><a href="docs/media/demo.mp4">Full-quality video (MP4)</a>. Recorded from the web build, which puts the tab bar at the top. On an iPhone it's at the bottom.</sub></p>
 
----
+## The problem
 
-## Features
+Weather apps show one temperature unit at a time, so if you need both °C and °F you're either changing settings or converting in your head. Currency and unit converters are usually separate apps or websites, and most of them don't remember the currencies you use or work offline.
 
-### Weather
-- **My Location:** asks for location permission when you first open the tab and shows the temperature where you are.
-- **Saved cities:** search for any city with **+** and swipe left and right between cities. Dots at the top show which city you're on. Press and hold a city's name to remove it.
-- For each location you see:
-  - The current temperature, large, in °C and °F
-  - Feels-like temperature and today's high and low
-  - An hour-by-hour strip for the next 24 hours
-  - A 7-day list of highs and lows, with a bar showing each day's range against the whole week
-- **Pull down to refresh.** The last forecast is saved, so it's still there offline (marked "Offline").
-- If you deny location access, you can still add cities by hand, and there's a shortcut to iOS Settings.
+## The solution
 
-### Currency
-- Type an amount on the top row and the converted amount appears below. Tap a currency code to change it, or tap the ⇅ button to swap the two.
-- The currency picker can be searched by code or name and shows a flag next to each currency.
-- **Favorites:** tap the ☆ next to any currency in the picker. Favorites sit at the top of the list and show as quick-pick chips below the converter.
-- **Defaults:** the ⚙︎ icon opens a screen where you set your default "from" and "to" currencies and manage favorites. The tab always opens on your default pair. If you switch to a different pair, a **Set as default** button appears.
-- Shows the exchange rate (e.g. `1 USD = 0.91 EUR`) and when the rates were last updated.
-- **Works offline:** it uses the last rates it downloaded and says it's offline.
+Three tabs: **Weather**, **Currency** and **Measure**.
 
-### Measure
-- A switch at the top chooses **Weight** or **Distance**.
-- **Weight units:** milligram, gram, kilogram, metric ton, ounce, pound, stone
-- **Distance units:** millimetre, centimetre, metre, kilometre, inch, foot, yard, mile, nautical mile
-- Any unit converts to any other (metric↔imperial, metric↔metric and so on).
-- Below the converter, a table shows your amount in every unit of that category.
-- **Defaults:** each category has its own default pair (built-in defaults are kg → lb and km → mi). Change them with ⚙︎ or **Set as default**.
-- Works fully offline.
+| Feature | What it does |
+|---|---|
+| **Weather** | Current temperature in °C and °F, feels-like, and today's high and low. Below that, the next 24 hours and a 7-day list where a bar shows each day's range against the whole week. |
+| **Locations** | Your current location, plus any cities you add with **+**. Swipe between them; dots at the top show which one you're on. Press and hold a city's name to remove it. |
+| **Currency** | About 160 currencies. Type an amount, tap a currency code to change it (the picker is searchable and shows flags), or tap ⇅ to swap. Shows the rate, e.g. `1 USD = 0.91 EUR`, and when it was updated. |
+| **Favorites & defaults** | Starred currencies go to the top of the picker and show as chips under the converter. The tab opens on your default pair, and a **Set as default** button appears when you change it. |
+| **Measure** | Weight (mg, g, kg, t, oz, lb, st) and distance (mm, cm, m, km, in, ft, yd, mi, nmi). Any unit to any other, with a table of the amount in every unit. Each has its own default pair, kg → lb and km → mi to start. |
+| **Offline** | The last forecast and rates are saved and shown, marked "Offline". Measure doesn't need a connection at all. |
 
-### General
-- Follows the system light / dark mode.
-- Number keyboard for entering amounts; both `12.5` and `12,5` are accepted.
-- Defaults, favorites, saved cities, rates and forecasts are all stored on the device.
+It uses the iOS tab bar, SF Symbols, large titles, sheet pickers and haptics, and follows light/dark mode. This version is built with Expo / React Native. A fully native App Store build is planned.
 
----
+## Screenshots
 
-## Installation
+<table>
+  <tr>
+    <td align="center"><img src="docs/media/01-weather.png" width="230" alt="Weather tab: 5°C and 41°F with hourly and 7-day forecasts"><br><sub>Weather</sub></td>
+    <td align="center"><img src="docs/media/02-weather-city.png" width="230" alt="Weather for a saved city, New York"><br><sub>A saved city</sub></td>
+    <td align="center"><img src="docs/media/03-currency.png" width="230" alt="Currency tab converting 250 USD to GBP"><br><sub>Currency</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/media/04-currency-picker.png" width="230" alt="Searchable currency picker with flags and starred favorites"><br><sub>Currency picker</sub></td>
+    <td align="center"><img src="docs/media/05-measure.png" width="230" alt="Measure tab converting 10 km to miles with a table of all units"><br><sub>Measure</sub></td>
+    <td></td>
+  </tr>
+</table>
 
-### Requirements
-- [Node.js](https://nodejs.org/) LTS (this was built with Node 26)
-- An iPhone with **Expo Go** installed from the App Store (or an Android phone with Expo Go from the Play Store)
-- The computer and the phone on the same Wi-Fi network
+<sub>Taken from the web build in a phone-sized browser.</sub>
 
-A Mac and Xcode are **not** needed to try the app.
+## Tech stack
 
-### Run it on your phone
+| Area | Choice |
+|---|---|
+| Framework | [Expo](https://expo.dev) SDK 58 · React Native 0.88 · React 19.3 |
+| Language | [TypeScript](https://www.typescriptlang.org/) 6 (strict) |
+| Navigation | [Expo Router](https://docs.expo.dev/router/introduction/) (file-based routes). Native tabs (`expo-router/native-tabs`) give the real iOS tab bar, and each tab has its own native stack with a large-title header |
+| Icons | `expo-symbols`: SF Symbols on iOS, Material Symbols on Android and web |
+| State | [Zustand](https://github.com/pmndrs/zustand) 5 with the `persist` middleware |
+| Storage | `@react-native-async-storage/async-storage` |
+| Location | `expo-location` (only while the app is in use, plus reverse geocoding for the city name) |
+| Haptics | `expo-haptics` |
+| Unit tests | Jest 30 with `jest-expo` |
+| Lint | ESLint 9 with `eslint-config-expo` |
+| README media | [Playwright](https://playwright.dev/) and [ffmpeg-static](https://github.com/eugeneware/ffmpeg-static) (`npm run media`) |
+
+### Data sources
+
+Both are free and need no API key.
+
+| Data | Service | Endpoint |
+|---|---|---|
+| Forecast | [Open-Meteo](https://open-meteo.com/) | `api.open-meteo.com/v1/forecast` |
+| City search | Open-Meteo Geocoding | `geocoding-api.open-meteo.com/v1/search` |
+| Exchange rates | [ExchangeRate-API (open access)](https://www.exchangerate-api.com/docs/free) | `open.er-api.com/v6/latest/USD` |
+
+Temperatures are downloaded in °C and converted to °F on the phone. Rates are quoted against USD, so any pair converts as `amount / rate[from] × rate[to]`.
+
+## Run it locally
+
+### Prerequisites
+
+- **[Node.js](https://nodejs.org/) LTS** (includes npm). This was built with Node 26.
+- **[Git](https://git-scm.com/)** to download the code.
+- **Expo Go** on your iPhone (App Store) or Android phone (Play Store).
+- The computer and the phone on the same Wi-Fi network.
+
+### 1. Download
+
 ```bash
-# 1. Install dependencies
-npm install
+git clone https://github.com/MasonHolland/Convert.git
+cd Convert
+```
 
-# 2. Start the development server
+Without Git, download the ZIP from the [repository page](https://github.com/MasonHolland/Convert) (**Code → Download ZIP**), unzip it, and open a terminal in that folder.
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
+
+```bash
 npx expo start
 ```
-3. **iPhone:** open the Camera app and scan the QR code shown in the terminal. It opens in Expo Go.
+
+### Run it on your phone
+
+1. **iPhone:** open the Camera app and scan the QR code in the terminal. It opens in Expo Go.
    **Android:** scan the QR code from inside Expo Go.
-4. Allow location access when asked, so the Weather tab can show your current location.
+2. Allow location access when asked, so the Weather tab can show where you are.
 
-If the phone can't connect (for example on a guest or office network), run `npx expo start --tunnel` instead.
+If the phone can't connect (a guest or office network, for example), use `npx expo start --tunnel`.
 
-### Run it in a browser (for quick checks during development)
-```bash
-npm run web
-```
-Open the URL it prints. Note that in a browser the tabs appear at the top instead of the bottom, and flags may show as letters on Windows.
+### In a browser
 
-### Useful commands
+`npm run web`, then open the URL it prints. This is only for quick checks: the tabs show at the top instead of the bottom, and on Windows flags show as letters.
+
+### Other commands
+
 | Command | What it does |
-| --- | --- |
+|---|---|
 | `npm start` | Start the Expo dev server |
 | `npm run web` | Run in a browser |
 | `npm test` | Run the unit tests (Jest) |
 | `npm run typecheck` | Check TypeScript types |
 | `npm run lint` | Run ESLint |
+| `npm run media` | Re-record the screenshots and demo video in `docs/media/` (see below) |
 | `npx expo-doctor` | Check for dependency and configuration problems |
 
-### Building a real iOS app (later)
+## Building the iOS app
+
 Expo's cloud service, EAS, can build and sign the iOS app without a Mac:
+
 ```bash
 npx eas-cli@latest build -p ios      # needs an Apple Developer account
 npx eas-cli@latest submit -p ios     # upload to TestFlight / App Store
 ```
+
 Before the first store build, change `ios.bundleIdentifier` in `app.json` (currently `com.convert.app`) to an identifier you own.
 
----
+## Screenshots and demo video
 
-## Tech stack
+`npm run media` records everything in `docs/media/` with Playwright, using the web build in a phone-sized Chromium. It starts `expo start --web` on port 8081 if it isn't already running, and writes PNG screenshots, `demo.mp4`, `demo.gif` (used above) and `demo-poster.jpg`. Use `npm run media -- --only shots` or `--only video` to do half. The first time, run `npx playwright install chromium`.
 
-| Area | Choice |
-| --- | --- |
-| Framework | [Expo](https://expo.dev) SDK 58 · React Native 0.88 · React 19.3 |
-| Language | TypeScript 6 (strict) |
-| Navigation | [Expo Router](https://docs.expo.dev/router/introduction/) (file-based routes). Native tabs (`expo-router/native-tabs`) give the real iOS tab bar, and each tab has its own native stack with a large-title header |
-| Icons | `expo-symbols`: SF Symbols on iOS, Material Symbols on Android and web |
-| State | [Zustand](https://github.com/pmndrs/zustand) 5 with the `persist` middleware |
-| Storage | `@react-native-async-storage/async-storage` |
-| Location | `expo-location` (location only while the app is in use, plus reverse geocoding for the city name) |
-| Haptics | `expo-haptics` |
-| Testing | Jest 30 with `jest-expo` |
-| Linting | ESLint 9 with `eslint-config-expo` |
+The weather and rates are live, with the location set to London. To make the browser look like a phone, the script loads a flag-emoji font (Windows has none) and stops the amount fields from overflowing their row. The steps are in `scripts/media/capture.mjs`.
 
-### Data sources (both free, no API key needed)
-| Data | Service | Endpoint |
-| --- | --- | --- |
-| Forecast | [Open-Meteo](https://open-meteo.com/) | `api.open-meteo.com/v1/forecast` |
-| City search | Open-Meteo Geocoding | `geocoding-api.open-meteo.com/v1/search` |
-| Exchange rates | [ExchangeRate-API (open access)](https://www.exchangerate-api.com/docs/free) | `open.er-api.com/v6/latest/USD` |
+## Project structure
 
-Temperatures are downloaded in °C and converted to °F on the phone. Exchange rates are quoted against USD, so any pair converts as `amount / rate[from] × rate[to]`.
-
-### Project structure
 ```
 app/                          Screens (Expo Router: every file is a route)
   _layout.tsx                 Root stack and theme; waits for saved data to load
@@ -146,12 +169,20 @@ src/
   components/                 Shared UI (ConverterCard, PickerSheet, DualTemp, WeatherPage …)
 components/, constants/       Theme helpers and the iOS-style colors
 __tests__/                    Unit tests
+scripts/media/                Records the README screenshots and video
+docs/media/                   Screenshots and demo video used in this README
 ```
 
 ### Adding a measurement unit
-Add an entry to `UNITS` in `src/lib/units.ts`. Its `factor` is how many base units (grams for weight, metres for distance) one of the new unit equals. Pickers, the "all units" table and conversions pick it up automatically.
 
----
+Add an entry to `UNITS` in `src/lib/units.ts`. Its `factor` is how many base units (grams for weight, metres for distance) one of the new unit equals. The pickers, the "all units" table and the conversions pick it up automatically.
+
+## Good to know
+
+- Location is only used while the app is open. If you deny it, you can still add cities by hand, and there's a shortcut to iOS Settings.
+- Pull down on the Weather tab to refresh.
+- Amounts can be typed as `12.5` or `12,5`.
+- Saved cities, defaults, favorites, rates and forecasts are all stored on the phone.
 
 ## License
 
