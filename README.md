@@ -129,7 +129,7 @@ If the phone can't connect (a guest or office network, for example), use `npx ex
 
 ## Web demo
 
-The web build is a demo of the iPhone app. Every push to `master` runs the tests, exports it with `npx expo export --platform web` and publishes it to GitHub Pages (`.github/workflows/deploy.yml`). `app.json` sets `experiments.baseUrl` to `/Convert` so it works from that sub-path.
+The web build is a demo of the iPhone app. Every push to `main` runs the tests, exports it with `npx expo export --platform web` and publishes it to GitHub Pages (`.github/workflows/deploy.yml`). `app.json` sets `experiments.baseUrl` to `/Convert` so it works from that sub-path.
 
 A few files only exist for the web build, and iOS never loads them:
 
